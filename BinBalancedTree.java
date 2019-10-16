@@ -186,10 +186,11 @@ public class BinBalancedTree<T extends Comparable<T>>{
         NodoBT n = find(raiz, elem);
         if (n == null)
             return false;
-        //Si la raiz es una hoja
+        //Si es una hoja
         if (n.getDer()==null && n.getIzq()==null){
             if (n.getPapa()==null){
-                n = null;                
+                n = null;  
+                raiz = null;
             }
             else
                 if (n.getElement().compareTo(n.getPapa().getElement())<0){
@@ -219,6 +220,15 @@ public class BinBalancedTree<T extends Comparable<T>>{
                 else{                    
                     n.getPapa().cuelga(n.getDer());
                 }//else
+                int eq = n.equilibrio ,a = n.calculaEquilibrio();
+                while (eq != a && n != null){
+                System.out.println("while delete raro");
+                if (Math.abs(a) == 2)
+                    rota(n);
+                n = n.getPapa();
+                eq = n.equilibrio;
+                a = n.calculaEquilibrio();
+            }//while
             }else
             if (n.getDer()==null){
                 if(n == raiz){
@@ -235,7 +245,7 @@ public class BinBalancedTree<T extends Comparable<T>>{
                 if(suc == n.getDer())
                     n.setDer(suc.getDer());
                 else
-                    suc.getPapa().setIzq(suc.getDer());
+                    suc.getPapa().setIzq(temp);
             }        
             cont--;
             return true;
@@ -453,20 +463,30 @@ public class BinBalancedTree<T extends Comparable<T>>{
     public static void main (String args[]){
         BinBalancedTree<Integer> t = new BinBalancedTree();
         Iterator<Integer> it;
-        t.agrega(7);        
-        t.agrega(8);
-        t.agrega(1);
-        t.agrega(0);
-        t.agrega(2);
-        t.agrega(3);
-        t.agrega(-1);
-        t.agrega(10);
+        t.agrega(100);        
+        t.agrega(300);
+        t.agrega(400);
+        t.agrega(350);
+        t.agrega(375);
+        t.agrega(50);
+        t.agrega(200);
+        t.agrega(360);
+        t.agrega(380);
+        t.agrega(500);
+        t.agrega(390);
         it = t.preOrden();
         StringBuilder s = new StringBuilder();
         while (it.hasNext())
             s.append(it.next()).append(", ");
         System.out.println(s.toString());
         System.out.println(t.raiz.equilibrio);
+        System.out.println("------------------------------original---------------------");
+        t.print2D(t.raiz);        
+        t.delete(375);
+        t.delete(50);
+        t.delete(400);
+        t.delete(380);
+        System.out.println("---------------------------después de borrar---------------------");
         t.print2D(t.raiz);
     }//main
 }//class
