@@ -246,8 +246,18 @@ public class BinBalancedTree<T extends Comparable<T>>{
                     n.setDer(suc.getDer());
                 else
                     suc.getPapa().setIzq(temp);
+                if (Math.abs(suc.calculaEquilibrio()) == 2)
+                    rota(suc);
+                if (suc.getDer() != null)
+                if (Math.abs(suc.getDer().calculaEquilibrio()) == 2)
+                    rota(suc.getDer());
+                if (suc.getIzq() != null)
+                if (Math.abs(suc.getIzq().calculaEquilibrio()) == 2)
+                    rota(suc.getIzq());
+                
             }        
             cont--;
+            balanceaTodo();
             return true;
     }
     public <T extends Comparable<T>> NodoBT<T> find(T ele){
@@ -257,6 +267,33 @@ public class BinBalancedTree<T extends Comparable<T>>{
             return null;
     }//method
     
+    private void balanceaTodo(){
+        NodoBT<T> p = raiz,i,d;
+        if (p != null){
+            i = p.getIzq();
+            d = p.getDer();
+        }//if
+        else
+            return;
+        if (Math.abs(p.calculaEquilibrio()) == 2)
+            rota(p);
+        balanceaTodo(i);
+        balanceaTodo(d);
+    }//method
+    
+    private void balanceaTodo(NodoBT<T> p){
+        NodoBT<T>i,d;
+        if (p != null){
+            i = p.getIzq();
+            d = p.getDer();
+        }//if
+        else
+            return;
+        if (Math.abs(p.calculaEquilibrio()) == 2)
+            rota(p);
+        balanceaTodo(i);
+        balanceaTodo(d);
+    }//method
     
     private <T extends Comparable<T>> NodoBT<T> find(NodoBT nodo, T elem){
         if (nodo == null)
